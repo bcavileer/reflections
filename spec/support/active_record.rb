@@ -2,6 +2,8 @@ require 'active_record'
 
 ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
 
+ActiveRecord::Migration.verbose = false
+
 ActiveRecord::Migration.create_table :users do |t|
   t.timestamps
 end
@@ -16,3 +18,7 @@ end
 ActiveRecord::Migration.create_table :other_classes do |t|
   t.timestamps
 end
+
+class User < ActiveRecord::Base; end
+class Widget < ActiveRecord::Base; end
+class OtherClass < ActiveRecord::Base; end
