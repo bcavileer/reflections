@@ -8,4 +8,6 @@ module Reflections
       Remapper.new(self, ar_obj).remap
     end
   end
+
+  ActiveRecord::Base.send(:include, ActiveRecordExtension)
 end
