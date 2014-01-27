@@ -12,7 +12,6 @@ ActiveRecord::Migration.create_table :users do |t|
 end
 
 ActiveRecord::Migration.create_table :widgets do |t|
-  t.string :name
   t.references :user
   t.references :creator
   t.timestamps
@@ -20,6 +19,11 @@ end
 
 ActiveRecord::Migration.create_table :other_classes do |t|
   t.timestamps
+end
+
+ActiveRecord::Migration.create_table :users_widgets do |t|
+  t.references :user
+  t.references :widget
 end
 
 class User < ActiveRecord::Base; end
