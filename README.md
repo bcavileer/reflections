@@ -1,6 +1,6 @@
 # Reflections
 
-Given an ActiveRecord object, it re-maps any belongs_to relationships to another object
+Given an ActiveRecord object, it re-maps relationships to another object
 of the same class.  Useful for reconciling database with accounts for same user, etc.
 
 ## Installation
@@ -23,7 +23,19 @@ Or install it yourself as:
 
     new_account = User.find_by_email 'user@newdomain.com'
 
-    old_account.map_belongs_to_associations_to new_account
+    old_account.map_associations_to new_account
+
+    you can optionally control the associations
+
+    old_account.map_associations_to(new_account, only: %w(belongs_to has_and_belongs_to_many))
+
+    you can optionally control the updating of the associations
+    or create reports by passing a block
+
+    old_account.map_associations_to(new_account) do |record, from_object, to_object|
+      puts "Remapping #{record} from #{from_object} to #{to_object}"
+      false # don't actually do update
+    end
 
 ## Contributing
 
