@@ -1,7 +1,5 @@
 require 'support/spec_helper'
 
-DatabaseCleaner.strategy = :truncation
-
 describe Reflections::Remapper do
 
   let(:user1) { User.create }

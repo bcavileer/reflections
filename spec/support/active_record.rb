@@ -1,4 +1,7 @@
 require 'active_record'
+require 'database_cleaner'
+
+DatabaseCleaner.strategy = :truncation
 
 ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
 
