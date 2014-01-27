@@ -24,4 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'sqlite3'
   spec.add_development_dependency 'database_cleaner'
+  spec.add_development_dependency 'guard-rspec'
+  spec.add_development_dependency 'pry'
 end
