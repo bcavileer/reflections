@@ -19,10 +19,11 @@ Or install it yourself as:
 
 ## Usage
 
-old_account = User.find_by_email 'ckern@miniofmtlaurel.com'
-new_account = User.find_by_email 'ckern@bmwofmtlaurel.com'
+    old_account = User.find_by_email 'user@olddomain.com'
 
-old_account.map_belongs_to_associations_to new_account
+    new_account = User.find_by_email 'user@newdomain.com'
+
+    old_account.map_belongs_to_associations_to new_account
 
 ## Contributing
 
