@@ -1,4 +1,5 @@
 require_relative 'remapper'
+require_relative 'remappers'
 
 module Reflections
   module ActiveRecordExtension
