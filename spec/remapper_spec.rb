@@ -19,6 +19,15 @@ describe 'Remapping' do
       user1.map_associations_to user2
       Widget.first.user.should eq(user2)
     end
+
+    it "doesn't affect other records" do
+      Widget.belongs_to :user
+      widget1 = Widget.create(:user => user1)
+      widget2 = Widget.create
+      user1.map_associations_to user2
+      widget1.reload.user.should eq(user2)
+      widget2.reload.should_not eq(user2)
+    end
   end
 
   describe 'Remapping custom named belongs_to' do
@@ -38,6 +47,17 @@ describe 'Remapping' do
       users = Widget.first.users
       users.should include(user2)
       users.should_not include(user1)
+    end
+
+    it "doesn't affect other records" do
+      Widget.has_and_belongs_to_many :users
+      widget1 = Widget.create :users => [user1]
+      widget2 = Widget.create
+      user1.map_associations_to user2
+      users = widget1.reload.users
+      users.should include(user2)
+      users.should_not include(user1)
+      widget2.reload.users.should_not include(user2)
     end
   end
 

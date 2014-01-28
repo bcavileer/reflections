@@ -6,8 +6,8 @@ module Reflections
       def remap &block
         ActiveRecord::Base.descendants.each do |ar_class|
           associations_for_class(ar_class).each do |assoc|
-            assoc.active_record.all.each do |record|
-              update_record_or_yield(record, assoc.name, &block)
+            ar_class.includes(assoc.name).where("#{assoc.join_table}.#{assoc.foreign_key}").references(assoc.name).each do |record|
+              update_record_or_yield record, assoc.name, &block
             end
           end
         end
