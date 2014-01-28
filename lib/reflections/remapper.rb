@@ -1,6 +1,6 @@
 module Reflections
   class Remapper
-    REMAPPERS = %w(belongs_to has_and_belongs_to_many)
+    REMAPPERS = []
     attr_reader :from_obj, :to_obj
 
     def initialize(from, to)
@@ -12,7 +12,8 @@ module Reflections
       protect_remap_from_other_classes
       remap_these = options.fetch(:only) { REMAPPERS }
       remap_these.each do |remapper|
-        "Reflections::Remappers::#{remapper.camelize}".constantize.new(from_obj, to_obj).remap &block
+        remapper_class = "Reflections::Remappers::#{remapper.camelize}".constantize
+        remapper_class.new(from_obj, to_obj).remap &block
       end
     end
 
@@ -26,12 +27,12 @@ module Reflections
 
     def update_record_or_yield(record, association_name)
       if !block_given? || block_given? && yield(record, from_obj, to_obj)
-        update_record(record, association_name)
+        update_record record, association_name
       end
     end
 
     def associations_for_class(ar_class)
-      filter = for_obj_class(from_obj.class)
+      filter = filter_for_class from_obj.class
       associations(ar_class).select &filter
     end
 

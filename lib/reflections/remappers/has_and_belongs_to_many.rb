@@ -1,9 +1,10 @@
 module Reflections
   module Remappers
     class HasAndBelongsToMany < Reflections::Remapper
+      REMAPPERS << 'has_and_belongs_to_many'
       attr_reader :from_obj, :to_obj
 
-      def remap &block
+      def remap(&block)
         ActiveRecord::Base.descendants.each do |ar_class|
           associations_for_class(ar_class).each do |assoc|
             ar_class.includes(assoc.name).where("#{assoc.join_table}.#{assoc.foreign_key}").references(assoc.name).each do |record|
@@ -15,7 +16,7 @@ module Reflections
 
       private
 
-      def for_obj_class(klass)
+      def filter_for_class(klass)
         ->(assoc) {
           assoc.name == klass.to_s.pluralize.underscore.to_sym || assoc.options[:class_name] == klass.model_name
         }
