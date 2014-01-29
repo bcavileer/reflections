@@ -6,7 +6,7 @@ describe 'Reporting' do
   before(:each) { DatabaseCleaner.clean }
   let(:user1) { User.create }
   let(:user2) { User.create }
-  before(:each) { Widget.create :user => user1 }
+  before(:each) { Widget.create user: user1 }
 
   describe 'when optional block returns true' do
     it 're-maps default belongs_to associations' do
