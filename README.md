@@ -19,23 +19,33 @@ Or install it yourself as:
 
 ## Usage
 
-    old_account = User.find_by_email 'user@olddomain.com'
+    user1 = User.create
 
-    new_account = User.find_by_email 'user@newdomain.com'
+    user2 = User.create
 
-    old_account.map_associations_to new_account
+    Widget.create user: user1
+
+    OtherClass.create user: user1
+
+    user1.map_associations_to user2
 
     you can optionally control the associations
 
-    old_account.map_associations_to(new_account, only: %w(belongs_to has_and_belongs_to_many))
+    user1.map_associations_to(user2, types: %w(belongs_to has_and_belongs_to_many))
 
     you can optionally control the updating of the associations
     or create reports by passing a block
 
-    old_account.map_associations_to(new_account) do |record, from_object, to_object|
-      puts "Remapping #{record} from #{from_object} to #{to_object}"
+    user1.map_associations_to(user2) do |record, association|
+      puts "Remapping #{association.macro} for #{record} from #{user1} to #{user2}"
       false # don't actually do update
     end
+
+    you can also control the classes remapped with :only and :exclude
+
+    user1.map_associations_to(user2, only: [Widget])
+
+    user1.map_associations_to(user2, except: [OtherClass])
 
 ## Contributing
 
