@@ -1,7 +1,5 @@
 require 'support/spec_helper'
 
-Widget.belongs_to :user
-
 describe 'Reporting' do
   before(:each) { DatabaseCleaner.clean }
   let(:user1) { User.create }

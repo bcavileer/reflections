@@ -1,3 +1,4 @@
+require 'pry'
 module Reflections
   class Remapper
     REMAPPERS = []
@@ -8,14 +9,21 @@ module Reflections
       @to_obj = to
     end
 
-
     def remap(options={}, &block)
       protect_remap_from_other_classes
+      @only_these_classes = options.fetch(:only) { ActiveRecord::Base.descendants }
+      @except_these_classes = options.fetch(:except) { [] }
       remap_these = options.fetch(:types) { REMAPPERS }
       remap_these.each do |remapper|
         remapper_class = "Reflections::Remappers::#{remapper.to_s.camelize}".constantize
-        remapper_class.new(from_obj, to_obj).remap &block
+        remapper_class.new(from_obj, to_obj).remap(ar_classes, &block)
       end
+    end
+
+    protected
+
+    def ar_classes
+      @only_these_classes - @except_these_classes
     end
 
     private

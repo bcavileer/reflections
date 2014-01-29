@@ -14,14 +14,12 @@ describe 'Remapping' do
 
   describe 'default belongs_to' do
     it 're-maps default belongs_to associations' do
-      Widget.belongs_to :user
       Widget.create user: user1
       user1.map_associations_to user2
       Widget.first.user.should eq(user2)
     end
 
     it "doesn't affect other records" do
-      Widget.belongs_to :user
       widget1 = Widget.create user: user1
       widget2 = Widget.create
       user1.map_associations_to user2
@@ -63,7 +61,6 @@ describe 'Remapping' do
 
   describe 'Remapping specific association type' do
     it 'given symbol; re-maps has_and_belongs_to_many associations but not the belongs_to' do
-      Widget.belongs_to :user
       Widget.has_and_belongs_to_many :users
       Widget.create user: user1, users: [user1]
       user1.map_associations_to user2, types: [:has_and_belongs_to_many]
@@ -72,12 +69,31 @@ describe 'Remapping' do
     end
 
     it 'given string; re-maps has_and_belongs_to_many associations but not the belongs_to' do
-      Widget.belongs_to :user
       Widget.has_and_belongs_to_many :users
       Widget.create user: user1, users: [user1]
       user1.map_associations_to user2, types: ['has_and_belongs_to_many']
       Widget.first.users include(user2)
       Widget.first.user.should eq(user1)
+    end
+  end
+
+  describe 'Remapping specific classes' do
+    it 'only remaps the whitelisted classes' do
+      Widget.create user: user1
+      OtherClass.create user: user1
+      user1.map_associations_to(user2, only: [Widget])
+      Widget.first.user.should eq(user2)
+      OtherClass.first.user.should eq(user1)
+    end
+  end
+
+  describe 'Excluding specific classes' do
+    it 'it excludes the blacklisted classes' do
+      Widget.create user: user1
+      OtherClass.create user: user1
+      user1.map_associations_to(user2, except: [OtherClass])
+      Widget.first.user.should eq(user2)
+      OtherClass.first.user.should eq(user1)
     end
   end
 end

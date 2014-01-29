@@ -2,9 +2,10 @@ module Reflections
   module Remappers
     class BelongsTo < Reflections::Remapper
       REMAPPERS << 'belongs_to'
+      attr_reader :remapper
 
-      def remap(&block)
-        ActiveRecord::Base.descendants.each do |ar_class|
+      def remap(ar_classes, &block)
+        ar_classes.each do |ar_class|
           associations_for_class(ar_class).each do |association|
             foreign_key = association.foreign_key || "#{association.name}_id"
             ar_class.where(foreign_key => from_obj).each do |record|

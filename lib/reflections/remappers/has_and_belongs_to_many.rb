@@ -3,8 +3,8 @@ module Reflections
     class HasAndBelongsToMany < Reflections::Remapper
       REMAPPERS << 'has_and_belongs_to_many'
 
-      def remap(&block)
-        ActiveRecord::Base.descendants.each do |ar_class|
+      def remap(ar_classes, &block)
+        ar_classes.each do |ar_class|
           associations_for_class(ar_class).each do |association|
             ar_class.includes(association.name).where("#{association.join_table}.#{association.foreign_key}").references(association.name).each do |record|
               update_record_or_yield record, association, &block
