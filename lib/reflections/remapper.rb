@@ -11,9 +11,9 @@ module Reflections
 
     def remap(options={}, &block)
       protect_remap_from_other_classes
-      remap_these = options.fetch(:only) { REMAPPERS }
+      remap_these = options.fetch(:types) { REMAPPERS }
       remap_these.each do |remapper|
-        remapper_class = "Reflections::Remappers::#{remapper.camelize}".constantize
+        remapper_class = "Reflections::Remappers::#{remapper.to_s.camelize}".constantize
         remapper_class.new(from_obj, to_obj).remap &block
       end
     end

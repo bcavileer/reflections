@@ -62,11 +62,20 @@ describe 'Remapping' do
   end
 
   describe 'Remapping specific association type' do
-    it 're-maps has_and_belongs_to_many associations but not the belongs_to' do
+    it 'given symbol; re-maps has_and_belongs_to_many associations but not the belongs_to' do
       Widget.belongs_to :user
       Widget.has_and_belongs_to_many :users
       Widget.create :user => user1, :users => [user1]
-      user1.map_associations_to user2, only: ['has_and_belongs_to_many']
+      user1.map_associations_to user2, types: [:has_and_belongs_to_many]
+      Widget.first.users include(user2)
+      Widget.first.user.should eq(user1)
+    end
+
+    it 'given string; re-maps has_and_belongs_to_many associations but not the belongs_to' do
+      Widget.belongs_to :user
+      Widget.has_and_belongs_to_many :users
+      Widget.create :user => user1, :users => [user1]
+      user1.map_associations_to user2, types: ['has_and_belongs_to_many']
       Widget.first.users include(user2)
       Widget.first.user.should eq(user1)
     end
