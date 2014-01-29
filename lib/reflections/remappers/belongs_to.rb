@@ -2,7 +2,6 @@ module Reflections
   module Remappers
     class BelongsTo < Reflections::Remapper
       REMAPPERS << 'belongs_to'
-      attr_reader :from_obj, :to_obj
 
       def remap(&block)
         ActiveRecord::Base.descendants.each do |ar_class|

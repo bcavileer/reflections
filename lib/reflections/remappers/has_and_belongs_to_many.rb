@@ -2,7 +2,6 @@ module Reflections
   module Remappers
     class HasAndBelongsToMany < Reflections::Remapper
       REMAPPERS << 'has_and_belongs_to_many'
-      attr_reader :from_obj, :to_obj
 
       def remap(&block)
         ActiveRecord::Base.descendants.each do |ar_class|
