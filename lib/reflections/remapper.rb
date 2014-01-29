@@ -8,6 +8,7 @@ module Reflections
       @to_obj = to
     end
 
+
     def remap(options={}, &block)
       protect_remap_from_other_classes
       remap_these = options.fetch(:only) { REMAPPERS }
@@ -25,9 +26,9 @@ module Reflections
       end
     end
 
-    def update_record_or_yield(record, association_name)
+    def update_record_or_yield(record, association)
       if !block_given? || block_given? && yield(record, from_obj, to_obj)
-        update_record record, association_name
+        update_record record, association
       end
     end
 

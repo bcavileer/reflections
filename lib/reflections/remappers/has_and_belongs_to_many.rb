@@ -6,9 +6,9 @@ module Reflections
 
       def remap(&block)
         ActiveRecord::Base.descendants.each do |ar_class|
-          associations_for_class(ar_class).each do |assoc|
-            ar_class.includes(assoc.name).where("#{assoc.join_table}.#{assoc.foreign_key}").references(assoc.name).each do |record|
-              update_record_or_yield record, assoc.name, &block
+          associations_for_class(ar_class).each do |association|
+            ar_class.includes(association.name).where("#{association.join_table}.#{association.foreign_key}").references(association.name).each do |record|
+              update_record_or_yield record, association, &block
             end
           end
         end
@@ -22,8 +22,8 @@ module Reflections
         }
       end
 
-      def update_record(record, association_name)
-        association = record.send association_name
+      def update_record(record, association)
+        association = record.send association.name
         association.delete(from_obj)
         association << to_obj
       end
