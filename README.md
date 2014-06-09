@@ -42,11 +42,11 @@ bar.user == user2
   
 ```
   
-##Optionally control the associations
+##Control the associations types for remapping
 ```
 user1.map_associations_to(user2, types: %w(belongs_to has_and_belongs_to_many))
 ```
-##Optionally control updating of associations
+##Control updating of associations 
 
 ```
 user1.map_associations_to(user2) do |record, association|
@@ -63,7 +63,7 @@ user1.map_associations_to(user2) do |record, association|
 end
 ```
 
-##Control the classes remapped with :only and :exclude
+##Control classes remapped with :only and :exclude
 ```
 user1.map_associations_to(user2, only: [Foo])
 user1.map_associations_to(user2, except: [Bar])
