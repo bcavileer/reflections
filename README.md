@@ -7,45 +7,67 @@ of the same class.  Useful for reconciling database with accounts for same user,
 
 Add this line to your application's Gemfile:
 
-    gem 'reflections'
+gem 'reflections'
 
 And then execute:
 
-    $ bundle
+$ bundle
 
 Or install it yourself as:
 
-    $ gem install reflections
+$ gem install reflections
 
-## Usage
+## Basic Usage
+###Given
+```ruby
+user1 = User.create 
+=> #<User:1>
+user2 = User.create
+=> #<User:2>
+foo = Foo.create user: user1
+=> #<Foo:1>
+bar = Bar.create user: user1
+=> #<Bar:1>
+```
+###When
+```ruby
+user1.map_associations_to user2
+```
+### Then
+```ruby
+foo.user
+=> #<User:2>
+bar.user == user2
+=> true
+  
+```
+  
+##Optionally control the associations
+```
+user1.map_associations_to(user2, types: %w(belongs_to has_and_belongs_to_many))
+```
+##Optionally control updating of associations
 
-    user1 = User.create
+```
+user1.map_associations_to(user2) do |record, association|
+  false # don't actually do update
+end
+```
 
-    user2 = User.create
+##Create reports
 
-    Widget.create user: user1
+```
+user1.map_associations_to(user2) do |record, association|
+  puts "Remapping #{association.macro} for #{record} from #{user1} to #{user2}"
+  false # don't actually do update
+end
+```
 
-    OtherClass.create user: user1
-
-    user1.map_associations_to user2
-
-    you can optionally control the associations
-
-    user1.map_associations_to(user2, types: %w(belongs_to has_and_belongs_to_many))
-
-    you can optionally control the updating of the associations
-    or create reports by passing a block
-
-    user1.map_associations_to(user2) do |record, association|
-      puts "Remapping #{association.macro} for #{record} from #{user1} to #{user2}"
-      false # don't actually do update
-    end
-
-    you can also control the classes remapped with :only and :exclude
-
-    user1.map_associations_to(user2, only: [Widget])
-
-    user1.map_associations_to(user2, except: [OtherClass])
+##Control the classes remapped with :only and :exclude
+```
+user1.map_associations_to(user2, only: [Foo])
+user1.map_associations_to(user2, except: [Bar])
+```
 
 ## Contributing
 
