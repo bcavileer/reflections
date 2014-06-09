@@ -3,22 +3,23 @@
 Given an ActiveRecord object, it re-maps relationships to another object
 of the same class.  Useful for reconciling database with accounts for same user, etc.
 
-## Installation
-
+### Installation
+#### Using Bundler
 Add this line to your application's Gemfile:
-
+```
 gem 'reflections'
-
-And then execute:
-
-$ bundle
-
-Or install it yourself as:
-
+```
+And execute:
+```
+$ bundle install
+```
+#### Without Bundler
+Install the gem with:
+```
 $ gem install reflections
-
-## Basic Usage
-###Given
+```
+### Basic Usage
+#### Given
 ```ruby
 user1 = User.create 
 => #<User:1>
@@ -29,11 +30,11 @@ foo = Foo.create user: user1
 bar = Bar.create user: user1
 => #<Bar:1>
 ```
-###When
+#### When
 ```ruby
 user1.map_associations_to user2
 ```
-### Then
+#### Then
 ```ruby
 foo.user
 => #<User:2>
@@ -42,11 +43,11 @@ bar.user == user2
   
 ```
   
-##Control the associations types for remapping
+### Control the associations types for remapping
 ```
 user1.map_associations_to(user2, types: %w(belongs_to has_and_belongs_to_many))
 ```
-##Control updating of associations 
+### Control updating of associations 
 
 ```
 user1.map_associations_to(user2) do |record, association|
@@ -54,7 +55,7 @@ user1.map_associations_to(user2) do |record, association|
 end
 ```
 
-##Create reports
+### Create reports
 
 ```
 user1.map_associations_to(user2) do |record, association|
@@ -63,13 +64,13 @@ user1.map_associations_to(user2) do |record, association|
 end
 ```
 
-##Control classes remapped with :only and :exclude
+### Control classes remapped with :only and :exclude
 ```
 user1.map_associations_to(user2, only: [Foo])
 user1.map_associations_to(user2, except: [Bar])
 ```
 
-## Contributing
+### Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
